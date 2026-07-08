@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36811.4 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelpDesk.TicketService.API", "HelpDesk.TicketService.API\HelpDesk.TicketService.API.csproj", "{CD4CE233-B3CC-4068-AA43-8F03CC8900B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelpDesk.TicketService.Application", "HelpDesk.TicketService.Application\HelpDesk.TicketService.Application.csproj", "{99F69710-40B7-49EE-B07D-5CE7BD8A2D31}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelpDesk.TicketService.Domain", "HelpDesk.TicketService.Domain\HelpDesk.TicketService.Domain.csproj", "{449611B6-FC27-481C-9FC0-9AC3DB135998}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelpDesk.TicketService.Infrastructure", "HelpDesk.TicketService.Infrastructure\HelpDesk.TicketService.Infrastructure.csproj", "{3D7D35C7-67C4-487B-8D40-ECB01215558F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		Notes.txt = Notes.txt
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CD4CE233-B3CC-4068-AA43-8F03CC8900B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD4CE233-B3CC-4068-AA43-8F03CC8900B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD4CE233-B3CC-4068-AA43-8F03CC8900B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD4CE233-B3CC-4068-AA43-8F03CC8900B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99F69710-40B7-49EE-B07D-5CE7BD8A2D31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99F69710-40B7-49EE-B07D-5CE7BD8A2D31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99F69710-40B7-49EE-B07D-5CE7BD8A2D31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99F69710-40B7-49EE-B07D-5CE7BD8A2D31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{449611B6-FC27-481C-9FC0-9AC3DB135998}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{449611B6-FC27-481C-9FC0-9AC3DB135998}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{449611B6-FC27-481C-9FC0-9AC3DB135998}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{449611B6-FC27-481C-9FC0-9AC3DB135998}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D7D35C7-67C4-487B-8D40-ECB01215558F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D7D35C7-67C4-487B-8D40-ECB01215558F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D7D35C7-67C4-487B-8D40-ECB01215558F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D7D35C7-67C4-487B-8D40-ECB01215558F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AB55D2D3-ED2E-446F-9C84-5B559E78A171}
+	EndGlobalSection
+EndGlobal
