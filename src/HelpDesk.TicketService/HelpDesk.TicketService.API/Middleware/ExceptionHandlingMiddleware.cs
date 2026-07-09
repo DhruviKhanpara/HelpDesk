@@ -2,7 +2,6 @@
 using HelpDesk.TicketService.Application.Common.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using System.Text.Json;
 
 namespace HelpDesk.TicketService.API.Middleware;
 
@@ -26,9 +25,7 @@ public sealed class ExceptionHandlingMiddleware
         catch (Exception exception)
         {
             _logger.LogError(
-                exception,
-                "Unhandled exception occurred. TraceId: {TraceId}",
-                context.TraceIdentifier);
+                exception, "Unhandled exception while processing {Method} {Path}", context.Request.Method, context.Request.Path);
 
             await HandleExceptionAsync(context, exception);
         }
@@ -36,6 +33,9 @@ public sealed class ExceptionHandlingMiddleware
 
     private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
+        if (context.Response.HasStarted)
+            return;
+
         var problemDetails = new ProblemDetails
         {
             Instance = context.Request.Path,

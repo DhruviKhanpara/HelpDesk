@@ -1,5 +1,6 @@
 
 using HelpDesk.TicketService.API.Extensions;
+using HelpDesk.TicketService.Application;
 using HelpDesk.TicketService.Infrastructure;
 using Microsoft.AspNetCore.HttpOverrides;
 using Serilog;
@@ -27,10 +28,11 @@ public class Program
         });
 
         // ---------- Application services ----------
+        builder.Services.AddApplication();
         builder.Services.AddInfrastructure(builder.Configuration);
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGenConfiguration();
 
         var app = builder.Build();
 
