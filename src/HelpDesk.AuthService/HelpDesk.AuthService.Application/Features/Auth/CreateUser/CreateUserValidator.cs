@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace HelpDesk.AuthService.Application.Features.CreateUser;
+namespace HelpDesk.AuthService.Application.Features.Auth.CreateUser;
 
 public sealed class CreateUserValidator : AbstractValidator<CreateUserRequest>
 {
@@ -29,5 +29,9 @@ public sealed class CreateUserValidator : AbstractValidator<CreateUserRequest>
 
         RuleFor(x => x.RoleId)
             .GreaterThan(0);
+
+        RuleFor(x => x.PhoneNumber)
+            .MaximumLength(20)
+            .When(x => !string.IsNullOrEmpty(x.PhoneNumber));
     }
 }

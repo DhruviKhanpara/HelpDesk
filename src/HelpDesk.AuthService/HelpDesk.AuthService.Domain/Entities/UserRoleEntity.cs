@@ -4,9 +4,13 @@ namespace HelpDesk.AuthService.Domain.Entities;
 
 public class UserRoleEntity : BaseAuditableEntity
 {
-    public UserRoleEntity(long userId, long roleId)
+    public UserRoleEntity(long userId, long roleId) : this(roleId)
     {
         UserId = userId;
+    }
+
+    public UserRoleEntity(long roleId)
+    {
         RoleId = roleId;
     }
 

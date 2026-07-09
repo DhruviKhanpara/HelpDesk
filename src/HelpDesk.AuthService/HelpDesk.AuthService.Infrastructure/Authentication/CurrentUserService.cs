@@ -28,7 +28,7 @@ public class CurrentUserService : ICurrentUserService
             return new CurrentUser
             {
                 UserId = long.TryParse(user.FindFirstValue(ClaimTypes.NameIdentifier), out var id) ? id : 0,
-                EmployeeCode = user.FindFirstValue("employee_code") ?? string.Empty,
+                EmployeeCode = user.FindFirstValue(CustomClaimTypes.EmployeeCode) ?? string.Empty,
                 Email = user.FindFirstValue(ClaimTypes.Email) ?? string.Empty,
                 FirstName = user.FindFirstValue(ClaimTypes.GivenName) ?? string.Empty,
                 LastName = user.FindFirstValue(ClaimTypes.Surname) ?? string.Empty,

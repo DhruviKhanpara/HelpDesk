@@ -1,4 +1,5 @@
 ﻿using HelpDesk.AuthService.Application.Common.Interfaces;
+using HelpDesk.AuthService.Infrastructure.Options;
 using HelpDesk.AuthService.Infrastructure.Persistence.Interceptors;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +12,11 @@ public static class PersistenceExtensions
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<AuditableEntitySaveChangesInterceptor>();
+
+        services.AddOptions<SeedDataOptions>()
+            .Bind(configuration.GetSection(SeedDataOptions.SectionName))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
 
         services.AddDbContext<AuthDbContext>((sp, options) =>
         {

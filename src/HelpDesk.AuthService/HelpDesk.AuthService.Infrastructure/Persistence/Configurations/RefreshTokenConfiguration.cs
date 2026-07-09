@@ -13,11 +13,11 @@ public class RefreshTokenConfiguration : BaseAuditableEntityConfiguration<Refres
 
         builder.ToTable("RefreshTokens", DbSchemas.Security);
 
-        builder.Property(x => x.Token)
+        builder.Property(x => x.TokenHash)
             .HasMaxLength(512)
             .IsRequired();
 
-        builder.HasIndex(x => x.Token)
+        builder.HasIndex(x => x.TokenHash)
             .IsUnique();
 
         builder.HasOne(x => x.User)

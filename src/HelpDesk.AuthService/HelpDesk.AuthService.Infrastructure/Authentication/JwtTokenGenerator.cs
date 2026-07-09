@@ -1,5 +1,6 @@
 ﻿using HelpDesk.AuthService.Application.Common.Interfaces;
 using HelpDesk.AuthService.Domain.Common;
+using HelpDesk.AuthService.Infrastructure.Options;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

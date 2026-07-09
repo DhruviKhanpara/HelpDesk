@@ -1,26 +1,32 @@
 ﻿using HelpDesk.AuthService.Application.Common.Exceptions;
 using HelpDesk.AuthService.Application.Common.Interfaces;
+using HelpDesk.AuthService.Domain.Constants;
 using HelpDesk.AuthService.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace HelpDesk.AuthService.Application.Features.CreateUser;
+namespace HelpDesk.AuthService.Application.Features.Auth.CreateUser;
 
 public sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, CreateUserResponse>
 {
     private readonly IApplicationDbContext _context;
     private readonly IPasswordHasher _passwordHasher;
+    private readonly ICurrentUserService _currentUserService;
 
-    public CreateUserCommandHandler(IApplicationDbContext context, IPasswordHasher passwordHasher)
+    public CreateUserCommandHandler(IApplicationDbContext context, IPasswordHasher passwordHasher, ICurrentUserService currentUserService)
     {
         _context = context;
         _passwordHasher = passwordHasher;
+        _currentUserService = currentUserService;
     }
 
     public async Task<CreateUserResponse> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         var createUserRequest = request.Request;
         var email = createUserRequest.Email.Trim().ToLowerInvariant();
+
+        if (_currentUserService.User.Roles.Any(x => x == Roles.Manager) && createUserRequest.RoleId == RoleIds.Admin)
+            throw new ForbiddenException("You do not have permission to access this resource.");
 
         var emailExists = await _context.Users
             .AnyAsync(x => x.Email == email, cancellationToken);
@@ -29,7 +35,7 @@ public sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand
             throw new ConflictException("A user with this email already exists.");
 
         var role = await _context.Roles
-            .FirstOrDefaultAsync(x => x.Id == createUserRequest.RoleId, cancellationToken);
+            .SingleOrDefaultAsync(x => x.Id == createUserRequest.RoleId, cancellationToken);
 
         if (role is null)
             throw new NotFoundException("Role", createUserRequest.RoleId);
@@ -41,9 +47,12 @@ public sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand
             FirstName = createUserRequest.FirstName,
             LastName = createUserRequest.LastName,
             Email = email,
+            PhoneNumber = createUserRequest.PhoneNumber,
             PasswordHash = passwordHash,
             IsActive = true
         };
+
+        user.UserRoles.Add(new UserRoleEntity(role.Id));
 
         await using var transaction = await _context.BeginTransactionAsync(cancellationToken);
 
@@ -54,9 +63,6 @@ public sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand
 
             user.GenerateEmployeeCode();
 
-            var userRole = new UserRoleEntity(user.Id, role.Id);
-
-            _context.UserRoles.Add(userRole);
             await _context.SaveChangesAsync(cancellationToken);
 
             await transaction.CommitAsync(cancellationToken);
