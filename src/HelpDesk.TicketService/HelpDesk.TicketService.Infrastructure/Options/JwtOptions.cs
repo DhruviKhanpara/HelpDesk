@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace HelpDesk.TicketService.Infrastructure.Authentication;
+namespace HelpDesk.TicketService.Infrastructure.Options;
 
 public class JwtOptions
 {

@@ -1,4 +1,5 @@
 ﻿using HelpDesk.TicketService.Application.Common.Interfaces;
+using HelpDesk.TicketService.Infrastructure.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
