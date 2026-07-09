@@ -33,7 +33,10 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
     {
         if (context is null) return;
 
-        var userName = _currentUserService.User.EmployeeCode ?? "system";
+        var userName = string.IsNullOrWhiteSpace(_currentUserService.User.EmployeeCode)
+            ? "System"
+            : _currentUserService.User.EmployeeCode;
+
         var now = _dateTime.Now;
 
         foreach (var entry in context.ChangeTracker.Entries<BaseAuditableEntity>())

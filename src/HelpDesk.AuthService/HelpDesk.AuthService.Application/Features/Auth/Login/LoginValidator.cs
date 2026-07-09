@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace HelpDesk.AuthService.Application.Features.Login;
+namespace HelpDesk.AuthService.Application.Features.Auth.Login;
 
 public sealed class LoginValidator : AbstractValidator<LoginRequest>
 {

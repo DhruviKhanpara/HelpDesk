@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace HelpDesk.AuthService.Application.Features.Login;
+namespace HelpDesk.AuthService.Application.Features.Auth.Login;
 
 public sealed record LoginCommand(LoginRequest Request, RequestContext Context)
     : IRequest<LoginResponse>;

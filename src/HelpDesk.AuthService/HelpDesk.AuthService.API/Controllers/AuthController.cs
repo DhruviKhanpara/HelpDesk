@@ -1,12 +1,12 @@
-﻿using HelpDesk.AuthService.Application.Features.Login;
-using Microsoft.AspNetCore.Mvc;
+﻿using HelpDesk.AuthService.Application.Features.Auth.Login;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HelpDesk.AuthService.API.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
-[Route("api/auth")]
+[Route("api/v1/auth")]
 public class AuthController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -16,8 +16,15 @@ public class AuthController : ControllerBase
         _mediator = mediator;
     }
 
+    /// <summary>
+    /// Authenticates a user and returns access and refresh tokens.
+    /// </summary>
     [HttpPost("login")]
-    public async Task<IActionResult> Login(LoginRequest request, CancellationToken cancellationToken)
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> Login([FromBody] LoginRequest request, CancellationToken cancellationToken)
     {
         var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown";
         var userAgent = HttpContext.Request.Headers.UserAgent.ToString();

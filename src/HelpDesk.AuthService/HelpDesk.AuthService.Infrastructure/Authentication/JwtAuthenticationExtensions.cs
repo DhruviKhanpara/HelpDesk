@@ -1,4 +1,5 @@
 ﻿using HelpDesk.AuthService.Application.Common.Interfaces;
+using HelpDesk.AuthService.Infrastructure.Options;
 using HelpDesk.AuthService.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
@@ -19,6 +20,7 @@ public static class JwtAuthenticationExtensions
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<IRefreshTokenHasher, RefreshTokenHasher>();
 
         services.AddOptions<JwtOptions>()
             .Bind(configuration.GetSection(JwtOptions.SectionName))

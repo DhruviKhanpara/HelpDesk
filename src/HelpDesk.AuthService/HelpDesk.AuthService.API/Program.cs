@@ -1,5 +1,6 @@
 
 using HelpDesk.AuthService.API.Extensions;
+using HelpDesk.AuthService.Application;
 using HelpDesk.AuthService.Infrastructure;
 using Microsoft.AspNetCore.HttpOverrides;
 using Serilog;
@@ -8,7 +9,7 @@ namespace HelpDesk.AuthService.API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -27,10 +28,11 @@ namespace HelpDesk.AuthService.API
             });
 
             // ---------- Application services ----------
+            builder.Services.AddApplication();
             builder.Services.AddInfrastructure(builder.Configuration);
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGenConfiguration();
 
             var app = builder.Build();
 
@@ -41,6 +43,7 @@ namespace HelpDesk.AuthService.API
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                await app.SeedDatabaseAsync();
             }
 
             app.UseHttpsRedirection();

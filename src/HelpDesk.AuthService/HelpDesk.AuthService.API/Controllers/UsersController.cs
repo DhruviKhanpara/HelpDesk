@@ -1,4 +1,4 @@
-﻿using HelpDesk.AuthService.Application.Features.CreateUser;
+﻿using HelpDesk.AuthService.Application.Features.Auth.CreateUser;
 using HelpDesk.AuthService.Domain.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -6,9 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HelpDesk.AuthService.API.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
-[Route("api/users")]
+[Route("api/v1/users")]
 [Authorize]
 public class UsersController : ControllerBase
 {
