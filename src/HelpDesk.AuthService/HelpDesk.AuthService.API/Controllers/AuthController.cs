@@ -11,11 +11,11 @@ namespace HelpDesk.AuthService.API.Controllers;
 [Route("api/v1/auth")]
 public class AuthController : ControllerBase
 {
-    private readonly IMediator _mediator;
+    private readonly ISender _sender;
 
-    public AuthController(IMediator mediator)
+    public AuthController(ISender sender)
     {
-        _mediator = mediator;
+        _sender = sender;
     }
 
     /// <summary>
@@ -32,7 +32,7 @@ public class AuthController : ControllerBase
         var userAgent = HttpContext.Request.Headers.UserAgent.ToString();
 
         var command = new LoginCommand(request, new RequestContext(ipAddress, userAgent));
-        var result = await _mediator.Send(command, cancellationToken);
+        var result = await _sender.Send(command, cancellationToken);
 
         return Ok(result);
     }
@@ -47,7 +47,7 @@ public class AuthController : ControllerBase
         var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown";
 
         var command = new RefreshTokenCommand(request.RefreshToken, ipAddress);
-        var response = await _mediator.Send(command, cancellationToken);
+        var response = await _sender.Send(command, cancellationToken);
 
         return Ok(response);
     }
@@ -62,7 +62,7 @@ public class AuthController : ControllerBase
         var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown";
 
         var command = new LogoutCommand(request.RefreshToken, ipAddress);
-        await _mediator.Send(command, cancellationToken);
+        await _sender.Send(command, cancellationToken);
 
         return NoContent();
     }

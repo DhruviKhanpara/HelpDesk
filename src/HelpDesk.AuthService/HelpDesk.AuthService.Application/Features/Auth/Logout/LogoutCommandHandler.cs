@@ -23,8 +23,7 @@ public sealed class LogoutCommandHandler : IRequestHandler<LogoutCommand>
         var tokenHash = _refreshTokenHasher.Hash(request.RefreshToken);
 
         var refreshToken = await _context.RefreshTokens
-            .SingleOrDefaultAsync(
-                rt => rt.TokenHash == tokenHash, cancellationToken);
+            .SingleOrDefaultAsync(rt => rt.TokenHash == tokenHash, cancellationToken);
 
         if (refreshToken is null)
             throw new UnauthorizedException("Invalid refresh token.");

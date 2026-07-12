@@ -13,10 +13,12 @@ namespace HelpDesk.AuthService.Infrastructure.Authentication;
 internal sealed class JwtTokenGenerator : IJwtTokenGenerator
 {
     private readonly JwtOptions _jwtOptions;
+    private readonly IDateTime _dateTime;
 
-    public JwtTokenGenerator(IOptions<JwtOptions> options)
+    public JwtTokenGenerator(IOptions<JwtOptions> options, IDateTime dateTime)
     {
         _jwtOptions = options.Value;
+        _dateTime = dateTime;
     }
 
     public TokenResult GenerateAccessToken(JwtUser user)
@@ -41,7 +43,7 @@ internal sealed class JwtTokenGenerator : IJwtTokenGenerator
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Secret));
 
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var expiresAt = DateTime.UtcNow.AddMinutes(_jwtOptions.AccessTokenExpirationMinutes);
+        var expiresAt = _dateTime.Now.AddMinutes(_jwtOptions.AccessTokenExpirationMinutes);
 
         var token = new JwtSecurityToken(
             issuer: _jwtOptions.Issuer,
@@ -56,7 +58,7 @@ internal sealed class JwtTokenGenerator : IJwtTokenGenerator
     public TokenResult GenerateRefreshToken()
     {
         var randomBytes = RandomNumberGenerator.GetBytes(64);
-        var expiresAt = DateTime.UtcNow.AddDays(_jwtOptions.RefreshTokenExpirationDays);
+        var expiresAt = _dateTime.Now.AddDays(_jwtOptions.RefreshTokenExpirationDays);
 
         return new TokenResult(Convert.ToBase64String(randomBytes), expiresAt);
     }

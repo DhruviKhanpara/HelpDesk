@@ -15,8 +15,8 @@ public class TicketEntity : BaseAuditableEntity
     public long PriorityId { get; set; }
 
 
-    public Guid RequesterUserId { get; set; }
-    public Guid? AssignedUserId { get; set; }
+    public long RequesterUserId { get; set; }
+    public long? AssignedUserId { get; set; }
 
     public DateTime? DueDate { get; set; }
     public DateTime? ClosedDate { get; set; }

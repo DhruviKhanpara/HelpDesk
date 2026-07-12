@@ -46,11 +46,10 @@ namespace HelpDesk.AuthService.API
                 await app.SeedDatabaseAsync();
             }
 
+            app.UseForwardedHeaders();
             app.UseHttpsRedirection();
 
             app.UseGlobalExceptionHandler();
-
-            app.UseForwardedHeaders();
 
             app.UseAuthentication();
             app.UseAuthorization();
