@@ -34,4 +34,14 @@ public class TicketEntity : BaseAuditableEntity
     public ICollection<TicketAttachmentEntity> Attachments { get; set; } = new List<TicketAttachmentEntity>();
     public ICollection<TicketHistoryEntity> History { get; set; } = new List<TicketHistoryEntity>();
     #endregion
+
+    #region Extension methods
+    public void AssignTicketNumber()
+    {
+        if (Id <= 0)
+            throw new InvalidOperationException("Ticket number cannot be generated before the ticket has been persisted.");
+
+        TicketNumber = $"HD-{Id:D6}";
+    }
+    #endregion
 }

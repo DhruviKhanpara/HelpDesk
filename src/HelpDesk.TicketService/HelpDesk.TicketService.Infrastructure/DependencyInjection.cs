@@ -1,7 +1,9 @@
 ﻿using HelpDesk.TicketService.Application.Common.Interfaces;
 using HelpDesk.TicketService.Infrastructure.Authentication;
+using HelpDesk.TicketService.Infrastructure.Options;
 using HelpDesk.TicketService.Infrastructure.Persistence;
 using HelpDesk.TicketService.Infrastructure.Services;
+using HelpDesk.TicketService.Infrastructure.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,7 +17,14 @@ public static class DependencyInjection
         services.AddPersistence(configuration)
             .AddJwtAuthentication(configuration);
 
+        services.AddOptions<AttachmentStorageOptions>()
+            .Bind(configuration.GetSection(AttachmentStorageOptions.SectionName))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
         services.AddSingleton<IDateTime, DateTimeService>();
+
+        services.AddScoped<IAttachmentStorageService, AttachmentStorageService>();
 
         return services;
     }
