@@ -22,4 +22,8 @@
     <ProjectReference Include="..\HelpDesk.TicketService.Infrastructure\HelpDesk.TicketService.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

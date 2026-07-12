@@ -48,6 +48,8 @@ public class Program
         app.UseForwardedHeaders();
         app.UseHttpsRedirection();
 
+        app.UseStaticFiles();
+
         app.UseGlobalExceptionHandler();
 
         app.UseAuthentication();
