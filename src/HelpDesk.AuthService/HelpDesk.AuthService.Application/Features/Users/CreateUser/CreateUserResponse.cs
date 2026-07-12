@@ -1,4 +1,4 @@
-﻿namespace HelpDesk.AuthService.Application.Features.Auth.CreateUser;
+﻿namespace HelpDesk.AuthService.Application.Features.Users.CreateUser;
 
 public sealed class CreateUserResponse
 {

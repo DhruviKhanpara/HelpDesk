@@ -1,4 +1,5 @@
-﻿using HelpDesk.AuthService.Application.Features.Auth.CreateUser;
+﻿using HelpDesk.AuthService.Application.Features.Users.CreateUser;
+using HelpDesk.AuthService.Application.Features.Users.GetUserById;
 using HelpDesk.AuthService.Domain.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -32,9 +33,21 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> Create([FromBody] CreateUserRequest request, CancellationToken cancellationToken)
     {
         var response = await _sender.Send(new CreateUserCommand(request), cancellationToken);
-        return StatusCode(StatusCodes.Status201Created, response);
+        return CreatedAtAction(nameof(GetUserById), new { id = response.UserId }, response);
+    }
 
-        //Replace with the below once GetUserById is completed.
-        //return CreatedAtAction(nameof(GetUserById), new { id = response.UserId }, response);
+    /// <summary>
+    /// Retrieves a single user by their id.
+    /// </summary>
+    [HttpGet("{id:long}")]
+    [Authorize(Roles = $"{Roles.Admin},{Roles.Manager}")]
+    [ProducesResponseType(typeof(GetUserByIdResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetUserById([FromRoute] long id, CancellationToken cancellationToken)
+    {
+        var response = await _sender.Send(new GetUserByIdQuery(id), cancellationToken);
+        return Ok(response);
     }
 }
