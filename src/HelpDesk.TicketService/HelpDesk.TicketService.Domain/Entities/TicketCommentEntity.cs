@@ -7,7 +7,7 @@ public class TicketCommentEntity : BaseAuditableEntity
     public long TicketId { get; set; }
     public TicketEntity Ticket { get; set; } = null!;
 
-    public Guid UserId { get; set; }
+    public long UserId { get; set; }
 
     public string Content { get; set; } = string.Empty;
 

@@ -45,11 +45,10 @@ public class Program
             app.UseSwaggerUI();
         }
 
+        app.UseForwardedHeaders();
         app.UseHttpsRedirection();
 
         app.UseGlobalExceptionHandler();
-
-        app.UseForwardedHeaders();
 
         app.UseAuthentication();
         app.UseAuthorization();

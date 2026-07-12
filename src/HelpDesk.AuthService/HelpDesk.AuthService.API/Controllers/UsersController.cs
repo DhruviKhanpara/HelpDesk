@@ -11,13 +11,17 @@ namespace HelpDesk.AuthService.API.Controllers;
 [Authorize]
 public class UsersController : ControllerBase
 {
-    private readonly IMediator _mediator;
+    private readonly ISender _sender;
 
-    public UsersController(IMediator mediator)
+    public UsersController(ISender sender)
     {
-        _mediator = mediator;
+        _sender = sender;
     }
 
+    /// <summary>
+    /// Creates a new User.
+    /// </summary>
+    /// <returns>The created User.</returns>
     [HttpPost]
     [Authorize(Roles = $"{Roles.Admin},{Roles.Manager}")]
     [ProducesResponseType(typeof(CreateUserResponse), StatusCodes.Status201Created)]
@@ -27,10 +31,10 @@ public class UsersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> Create([FromBody] CreateUserRequest request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new CreateUserCommand(request), cancellationToken);
+        var response = await _sender.Send(new CreateUserCommand(request), cancellationToken);
         return StatusCode(StatusCodes.Status201Created, response);
 
-        //Replace with bellow once GetUserById completed
+        //Replace with the below once GetUserById is completed.
         //return CreatedAtAction(nameof(GetUserById), new { id = response.UserId }, response);
     }
 }

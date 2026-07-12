@@ -25,13 +25,13 @@ public sealed class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCom
 
     public async Task<LoginResponse> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
     {
+        var requestTokenHash = _refreshTokenHasher.Hash(request.RefreshToken);
+
         var refreshToken = await _context.RefreshTokens
             .Include(rt => rt.User)
                 .ThenInclude(u => u.UserRoles)
                     .ThenInclude(ur => ur.Role)
-            .SingleOrDefaultAsync(
-                rt => rt.TokenHash == _refreshTokenHasher.Hash(request.RefreshToken),
-                cancellationToken);
+            .SingleOrDefaultAsync(rt => rt.TokenHash == requestTokenHash, cancellationToken);
 
         var now = _dateTime.Now;
 

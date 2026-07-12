@@ -4,7 +4,7 @@ namespace HelpDesk.AuthService.Domain.Entities;
 
 public class UserEntity : BaseAuditableEntity
 {
-    public string EmployeeCode { get; set; } = null!;
+    public string EmployeeCode { get; set; } = string.Empty;
 
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;

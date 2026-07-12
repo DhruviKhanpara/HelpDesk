@@ -17,7 +17,7 @@ namespace HelpDesk.TicketService.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.9")
+                .HasAnnotation("ProductVersion", "8.0.25")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -441,8 +441,8 @@ namespace HelpDesk.TicketService.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -463,8 +463,8 @@ namespace HelpDesk.TicketService.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<Guid?>("AssignedUserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<long?>("AssignedUserId")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("CategoryId")
                         .HasColumnType("bigint");
@@ -503,8 +503,8 @@ namespace HelpDesk.TicketService.Infrastructure.Migrations
                     b.Property<long>("PriorityId")
                         .HasColumnType("bigint");
 
-                    b.Property<Guid>("RequesterUserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<long>("RequesterUserId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Resolution")
                         .HasMaxLength(4000)

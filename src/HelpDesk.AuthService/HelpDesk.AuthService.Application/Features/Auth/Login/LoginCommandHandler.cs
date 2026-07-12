@@ -27,12 +27,13 @@ public sealed class LoginCommandHandler : IRequestHandler<LoginCommand, LoginRes
 
     public async Task<LoginResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var loginRequest = request.Request;
+        var model = request.Request;
+        var email = model.Email.Trim().ToLowerInvariant();
 
         var user = await _context.Users
             .Include(u => u.UserRoles)
                 .ThenInclude(ur => ur.Role)
-            .SingleOrDefaultAsync(u => u.Email == loginRequest.Email, cancellationToken);
+            .SingleOrDefaultAsync(u => u.Email == email, cancellationToken);
 
         var now = _dateTime.Now;
 
@@ -48,7 +49,7 @@ public sealed class LoginCommandHandler : IRequestHandler<LoginCommand, LoginRes
             throw new UnauthorizedException("This account has been deactivated. Contact your administrator.");
         }
 
-        var isPasswordValid = _passwordHasher.Verify(loginRequest.Password, user.PasswordHash);
+        var isPasswordValid = _passwordHasher.Verify(model.Password, user.PasswordHash);
 
         if (!isPasswordValid)
         {

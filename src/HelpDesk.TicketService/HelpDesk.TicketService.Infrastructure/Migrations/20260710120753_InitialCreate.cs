@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace HelpDesk.TicketService.Infrastructure.Migrations
 {
     /// <inheritdoc />
@@ -31,14 +33,7 @@ namespace HelpDesk.TicketService.Infrastructure.Migrations
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     DisplayOrder = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -52,18 +47,11 @@ namespace HelpDesk.TicketService.Infrastructure.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Color = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     DisplayOrder = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-                    Color = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -77,19 +65,12 @@ namespace HelpDesk.TicketService.Infrastructure.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Color = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    IsClosedStatus = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     DisplayOrder = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-                    Color = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    IsClosedStatus = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -109,8 +90,8 @@ namespace HelpDesk.TicketService.Infrastructure.Migrations
                     CategoryId = table.Column<long>(type: "bigint", nullable: false),
                     StatusId = table.Column<long>(type: "bigint", nullable: false),
                     PriorityId = table.Column<long>(type: "bigint", nullable: false),
-                    RequesterUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AssignedUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    RequesterUserId = table.Column<long>(type: "bigint", nullable: false),
+                    AssignedUserId = table.Column<long>(type: "bigint", nullable: true),
                     DueDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ClosedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Resolution = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true),
@@ -190,7 +171,7 @@ namespace HelpDesk.TicketService.Infrastructure.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TicketId = table.Column<long>(type: "bigint", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
                     IsInternal = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -246,18 +227,62 @@ namespace HelpDesk.TicketService.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                schema: "lookup",
+                table: "Categories",
+                columns: new[] { "Id", "CategoryCode", "Description", "DisplayOrder", "IsActive", "Name" },
+                values: new object[,]
+                {
+                    { 1L, "HW", "Hardware related issues", 1, true, "Hardware" },
+                    { 2L, "SW", "Software related issues", 2, true, "Software" },
+                    { 3L, "NET", "Network and connectivity issues", 3, true, "Network" },
+                    { 4L, "EMAIL", "Email related issues", 4, true, "Email" },
+                    { 5L, "PRN", "Printer issues", 5, true, "Printer" },
+                    { 6L, "ACC", "Access and permission requests", 6, true, "Access" },
+                    { 7L, "OTH", "Miscellaneous requests", 7, true, "Other" }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "lookup",
+                table: "Priorities",
+                columns: new[] { "Id", "Color", "Description", "DisplayOrder", "IsActive", "Name" },
+                values: new object[,]
+                {
+                    { 1L, "#28A745", "Low priority", 1, true, "Low" },
+                    { 2L, "#FFC107", "Medium priority", 2, true, "Medium" },
+                    { 3L, "#FD7E14", "High priority", 3, true, "High" },
+                    { 4L, "#DC3545", "Critical priority", 4, true, "Critical" }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "lookup",
+                table: "Statuses",
+                columns: new[] { "Id", "Color", "Description", "DisplayOrder", "IsActive", "Name" },
+                values: new object[,]
+                {
+                    { 1L, "#0D6EFD", "Ticket has been created and is waiting to be assigned.", 1, true, "Open" },
+                    { 2L, "#6610F2", "Ticket has been assigned to a support agent.", 2, true, "Assigned" },
+                    { 3L, "#0DCAF0", "Support agent is actively working on the ticket.", 3, true, "In Progress" },
+                    { 4L, "#FFC107", "Awaiting additional information or confirmation from the requester.", 4, true, "Waiting for User" },
+                    { 5L, "#198754", "Issue has been resolved and is awaiting closure.", 5, true, "Resolved" }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "lookup",
+                table: "Statuses",
+                columns: new[] { "Id", "Color", "Description", "DisplayOrder", "IsActive", "IsClosedStatus", "Name" },
+                values: new object[,]
+                {
+                    { 6L, "#6C757D", "Ticket has been completed and closed.", 6, true, true, "Closed" },
+                    { 7L, "#DC3545", "Ticket was cancelled and will not be processed.", 7, true, true, "Cancelled" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Categories_CategoryCode",
                 schema: "lookup",
                 table: "Categories",
                 column: "CategoryCode",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Categories_IsDeleted",
-                schema: "lookup",
-                table: "Categories",
-                column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Categories_Name",
@@ -267,23 +292,11 @@ namespace HelpDesk.TicketService.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Priorities_IsDeleted",
-                schema: "lookup",
-                table: "Priorities",
-                column: "IsDeleted");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Priorities_Name",
                 schema: "lookup",
                 table: "Priorities",
                 column: "Name",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Statuses_IsDeleted",
-                schema: "lookup",
-                table: "Statuses",
-                column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Statuses_Name",

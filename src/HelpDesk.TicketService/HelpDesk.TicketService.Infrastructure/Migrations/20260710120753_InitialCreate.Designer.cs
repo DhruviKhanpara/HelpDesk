@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HelpDesk.TicketService.Infrastructure.Migrations
 {
     [DbContext(typeof(TicketDbContext))]
-    [Migration("20260706123748_SeedDataInLookups")]
-    partial class SeedDataInLookups
+    [Migration("20260710120753_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.9")
+                .HasAnnotation("ProductVersion", "8.0.25")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -258,6 +258,7 @@ namespace HelpDesk.TicketService.Infrastructure.Migrations
                         {
                             Id = 1L,
                             Color = "#0D6EFD",
+                            Description = "Ticket has been created and is waiting to be assigned.",
                             DisplayOrder = 1,
                             IsActive = true,
                             IsClosedStatus = false,
@@ -267,6 +268,7 @@ namespace HelpDesk.TicketService.Infrastructure.Migrations
                         {
                             Id = 2L,
                             Color = "#6610F2",
+                            Description = "Ticket has been assigned to a support agent.",
                             DisplayOrder = 2,
                             IsActive = true,
                             IsClosedStatus = false,
@@ -276,6 +278,7 @@ namespace HelpDesk.TicketService.Infrastructure.Migrations
                         {
                             Id = 3L,
                             Color = "#0DCAF0",
+                            Description = "Support agent is actively working on the ticket.",
                             DisplayOrder = 3,
                             IsActive = true,
                             IsClosedStatus = false,
@@ -285,6 +288,7 @@ namespace HelpDesk.TicketService.Infrastructure.Migrations
                         {
                             Id = 4L,
                             Color = "#FFC107",
+                            Description = "Awaiting additional information or confirmation from the requester.",
                             DisplayOrder = 4,
                             IsActive = true,
                             IsClosedStatus = false,
@@ -294,6 +298,7 @@ namespace HelpDesk.TicketService.Infrastructure.Migrations
                         {
                             Id = 5L,
                             Color = "#198754",
+                            Description = "Issue has been resolved and is awaiting closure.",
                             DisplayOrder = 5,
                             IsActive = true,
                             IsClosedStatus = false,
@@ -303,6 +308,7 @@ namespace HelpDesk.TicketService.Infrastructure.Migrations
                         {
                             Id = 6L,
                             Color = "#6C757D",
+                            Description = "Ticket has been completed and closed.",
                             DisplayOrder = 6,
                             IsActive = true,
                             IsClosedStatus = true,
@@ -312,6 +318,7 @@ namespace HelpDesk.TicketService.Infrastructure.Migrations
                         {
                             Id = 7L,
                             Color = "#DC3545",
+                            Description = "Ticket was cancelled and will not be processed.",
                             DisplayOrder = 7,
                             IsActive = true,
                             IsClosedStatus = true,
@@ -437,8 +444,8 @@ namespace HelpDesk.TicketService.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -459,8 +466,8 @@ namespace HelpDesk.TicketService.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<Guid?>("AssignedUserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<long?>("AssignedUserId")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("CategoryId")
                         .HasColumnType("bigint");
@@ -499,8 +506,8 @@ namespace HelpDesk.TicketService.Infrastructure.Migrations
                     b.Property<long>("PriorityId")
                         .HasColumnType("bigint");
 
-                    b.Property<Guid>("RequesterUserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<long>("RequesterUserId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Resolution")
                         .HasMaxLength(4000)
