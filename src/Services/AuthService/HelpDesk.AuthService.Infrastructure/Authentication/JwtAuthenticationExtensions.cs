@@ -22,17 +22,15 @@ public static class JwtAuthenticationExtensions
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IRefreshTokenHasher, RefreshTokenHasher>();
 
-        services.AddOptions<JwtOptions>()
-            .Bind(configuration.GetSection(JwtOptions.SectionName))
+        var jwtSection = configuration.GetRequiredSection(JwtOptions.SectionName);
+
+        services
+            .AddOptions<JwtOptions>()
+            .Bind(jwtSection)
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
-        var jwtOptions = configuration
-            .GetRequiredSection(JwtOptions.SectionName)
-            .Get<JwtOptions>()
-            ?? throw new InvalidOperationException("JWT configuration is missing.");
-
-        var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Secret));
+        var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSection["Secret"]!));
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -46,8 +44,8 @@ public static class JwtAuthenticationExtensions
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
 
-                    ValidIssuer = jwtOptions.Issuer,
-                    ValidAudience = jwtOptions.Audience,
+                    ValidIssuer = jwtSection["Issuer"]!,
+                    ValidAudience = jwtSection["Audience"],
 
                     IssuerSigningKey = signingKey,
 

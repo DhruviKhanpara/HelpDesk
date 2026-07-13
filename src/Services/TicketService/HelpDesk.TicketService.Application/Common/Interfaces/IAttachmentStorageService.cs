@@ -6,4 +6,5 @@ public interface IAttachmentStorageService
 {
     Task<IReadOnlyList<AttachmentUploadResult>> UploadAsync(IEnumerable<IUploadedFile> files, CancellationToken cancellationToken);
     void Delete(IEnumerable<string> relativePaths);
+    Stream OpenRead(string storagePath);
 }

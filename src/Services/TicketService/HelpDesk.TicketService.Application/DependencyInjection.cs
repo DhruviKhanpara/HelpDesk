@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
+using HelpDesk.TicketService.Application.Behaviours;
 using HelpDesk.TicketService.Application.Features.Tickets.Authorization;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -12,6 +14,10 @@ public static class DependencyInjection
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+        services.AddTransient(
+            typeof(IPipelineBehavior<,>),
+            typeof(ValidationBehaviour<,>));
 
         services.AddScoped<ITicketAuthorizationService, TicketAuthorizationService>();
 

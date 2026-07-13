@@ -5,6 +5,7 @@ using HelpDesk.TicketService.Domain.Entities;
 using HelpDesk.TicketService.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace HelpDesk.TicketService.Application.Features.Tickets.CreateTicket;
 
@@ -13,12 +14,14 @@ public sealed class CreateTicketCommandHandler : IRequestHandler<CreateTicketCom
     private readonly IApplicationDbContext _context;
     private readonly ICurrentUserService _currentUser;
     private readonly IAttachmentStorageService _attachmentStorageService;
+    private readonly ILogger<CreateTicketCommandHandler> _logger;
 
-    public CreateTicketCommandHandler(IApplicationDbContext context, ICurrentUserService currentUser, IAttachmentStorageService attachmentStorageService)
+    public CreateTicketCommandHandler(IApplicationDbContext context, ICurrentUserService currentUser, IAttachmentStorageService attachmentStorageService, ILogger<CreateTicketCommandHandler> logger)
     {
         _context = context;
         _currentUser = currentUser;
         _attachmentStorageService = attachmentStorageService;
+        _logger = logger;
     }
 
     public async Task<CreateTicketResponse> Handle(CreateTicketCommand request, CancellationToken cancellationToken)
@@ -82,7 +85,14 @@ public sealed class CreateTicketCommandHandler : IRequestHandler<CreateTicketCom
         {
             if (uploadedFiles.Any())
             {
-                _attachmentStorageService.Delete(uploadedFiles);
+                try
+                {
+                    _attachmentStorageService.Delete(uploadedFiles);
+                }
+                catch
+                {
+                    _logger.LogError("Failed to delete uploaded attachments after ticket creation rollback. Files: {Files}", string.Join(", ", uploadedFiles));
+                }
             }
 
             await transaction.RollbackAsync(cancellationToken);

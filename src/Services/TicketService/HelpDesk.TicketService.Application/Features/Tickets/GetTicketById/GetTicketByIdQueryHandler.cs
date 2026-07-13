@@ -25,17 +25,18 @@ public sealed class GetTicketByIdQueryHandler : IRequestHandler<GetTicketByIdQue
             .Include(x => x.Category)
             .Include(x => x.Priority)
             .Include(x => x.Status)
-            .Where(u => u.Id == request.TicketId && !u.IsDeleted)
+            .Where(u => u.TicketNumber == request.TicketNumber && !u.IsDeleted)
             .SingleOrDefaultAsync(cancellationToken);
 
         if (ticket is null)
-            throw new NotFoundException("Ticket", request.TicketId);
+            throw new NotFoundException("Ticket", request.TicketNumber);
 
         _ticketAuthorization.EnsureCanView(ticket);
 
         return new GetTicketByIdResponse
         {
-            Id = request.TicketId,
+            Id = ticket.Id,
+            TicketNumber = request.TicketNumber,
             Title = ticket.Title,
             Description = ticket.Description,
             Category = ticket.Category.Name,
@@ -49,7 +50,7 @@ public sealed class GetTicketByIdQueryHandler : IRequestHandler<GetTicketByIdQue
                 FileName = a.OriginalFileName,
                 ContentType = a.ContentType,
                 FileSize = a.FileSize,
-                Url = "/" + a.StoragePath.Replace("\\", "/")
+                Url = $"/api/tickets/{ticket.TicketNumber}/attachments/{a.Id}"
             }).ToList()
         };
     }

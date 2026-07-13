@@ -5,7 +5,6 @@ using HelpDesk.TicketService.Application.Features.Tickets.GetTicketById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace HelpDesk.TicketService.API.Controllers;
 
@@ -15,10 +14,29 @@ namespace HelpDesk.TicketService.API.Controllers;
 public class TicketController : ControllerBase
 {
     private readonly ISender _sender;
+    private readonly IAttachmentStorageService _attachmentStorageService;
 
-    public TicketController(ISender sender)
+    public TicketController(ISender sender, IAttachmentStorageService attachmentStorageService)
     {
         _sender = sender;
+        _attachmentStorageService = attachmentStorageService;
+    }
+
+    [HttpGet("{ticketNumber}")]
+    public async Task<IActionResult> GetTicketById(string ticketNumber, CancellationToken cancellationToken)
+    {
+        var response = await _sender.Send(new GetTicketByIdQuery(ticketNumber), cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpGet("{ticketNumber}/attachments/{attachmentId:int}")]
+    public async Task<IActionResult> DownloadAttachment(string ticketNumber, int attachmentId, CancellationToken cancellationToken)
+    {
+        var result = await _sender.Send(new DownloadTicketAttachmentQuery(ticketNumber, attachmentId), cancellationToken);
+
+        var stream = _attachmentStorageService.OpenRead(result.FilePath);
+
+        return File(stream, result.ContentType, result.FileName);
     }
 
     /// <summary>
@@ -42,15 +60,8 @@ public class TicketController : ControllerBase
         };
 
         var command = new CreateTicketCommand(tickerRequest);
-        
-        var response = await _sender.Send(command, cancellationToken);
-        return CreatedAtAction(nameof(GetTicketById), new { id = response.TicketId }, response);
-    }
 
-    [HttpGet("{id:long}")]
-    public async Task<IActionResult> GetTicketById(long id, CancellationToken cancellationToken)
-    {
-        var response = await _sender.Send(new GetTicketByIdQuery(id), cancellationToken);
-        return Ok(response);
+        var response = await _sender.Send(command, cancellationToken);
+        return CreatedAtAction(nameof(GetTicketById), new { ticketNumber = response.TicketNumber }, response);
     }
 }
