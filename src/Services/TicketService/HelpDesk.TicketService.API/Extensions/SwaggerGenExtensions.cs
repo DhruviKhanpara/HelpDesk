@@ -11,7 +11,7 @@ public static class SwaggerGenExtensions
         {
             options.SwaggerDoc("v1", new OpenApiInfo
             {
-                Title = "HelpDesk Auth API",
+                Title = "HelpDesk Ticket Service API",
                 Version = "v1"
             });
 

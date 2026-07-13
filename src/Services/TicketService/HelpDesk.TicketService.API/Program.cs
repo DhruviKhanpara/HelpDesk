@@ -34,6 +34,8 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGenConfiguration();
 
+        builder.Services.AddHealthChecks();
+
         var app = builder.Build();
 
         app.UseSerilogRequestLogging(); // logs one line per HTTP request, incl. status code + duration
@@ -54,6 +56,8 @@ public class Program
 
         app.UseAuthentication();
         app.UseAuthorization();
+
+        app.MapHealthChecks("/health");
 
         app.MapControllers();
 

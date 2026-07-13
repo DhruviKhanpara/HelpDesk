@@ -34,6 +34,8 @@ namespace HelpDesk.AuthService.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGenConfiguration();
 
+            builder.Services.AddHealthChecks();
+
             var app = builder.Build();
 
             app.UseSerilogRequestLogging();
@@ -53,6 +55,8 @@ namespace HelpDesk.AuthService.API
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.MapHealthChecks("/health");
 
             app.MapControllers();
 
