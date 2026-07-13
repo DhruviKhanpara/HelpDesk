@@ -62,6 +62,14 @@ public sealed class ExceptionHandlingMiddleware
 
                 break;
 
+            case InvalidDataAppException invalidData:
+
+                problemDetails.Title = "Invalid Data";
+                problemDetails.Status = StatusCodes.Status400BadRequest;
+                problemDetails.Detail = invalidData.Message;
+
+                break;
+
             case UnauthorizedException unauthorized:
 
                 problemDetails.Title = "Unauthorized";

@@ -1,4 +1,5 @@
-﻿using HelpDesk.TicketService.Application.Common.Interfaces;
+﻿using HelpDesk.TicketService.Application.Common.Exceptions;
+using HelpDesk.TicketService.Application.Common.Interfaces;
 using HelpDesk.TicketService.Application.Common.Models;
 using HelpDesk.TicketService.Infrastructure.Options;
 using Microsoft.AspNetCore.Hosting;
@@ -21,7 +22,7 @@ internal sealed class AttachmentStorageService : IAttachmentStorageService
     {
         var uploadedFiles = new List<AttachmentUploadResult>();
 
-        var fileList = files?.ToList() ?? [];
+        var fileList = files.ToList();
 
         if (!fileList.Any())
             return uploadedFiles;
@@ -29,7 +30,7 @@ internal sealed class AttachmentStorageService : IAttachmentStorageService
         if (fileList.Count > _options.MaxFiles)
             throw new InvalidOperationException($"Maximum {_options.MaxFiles} attachments are allowed.");
 
-        var uploadDirectory = Path.Combine(_environment.WebRootPath, _options.UploadPath.Replace('/', Path.DirectorySeparatorChar));
+        var uploadDirectory = _options.UploadPath;
 
         Directory.CreateDirectory(uploadDirectory);
 
@@ -55,8 +56,7 @@ internal sealed class AttachmentStorageService : IAttachmentStorageService
             {
                 OriginalFileName = file.FileName,
                 StoredFileName = storedFileName,
-                RelativePath = Path.Combine(_options.UploadPath, storedFileName)
-                    .Replace(Path.DirectorySeparatorChar, '/'),
+                RelativePath = fullPath,
                 ContentType = file.ContentType,
                 FileSize = file.Length
             });
@@ -69,26 +69,37 @@ internal sealed class AttachmentStorageService : IAttachmentStorageService
     {
         foreach (var relativePath in relativePaths)
         {
-            var fullPath = Path.Combine(_environment.WebRootPath, relativePath.Replace('/', Path.DirectorySeparatorChar));
-
-            if (File.Exists(fullPath))
+            if (File.Exists(relativePath))
             {
-                File.Delete(fullPath);
+                File.Delete(relativePath);
             }
         }
+    }
+
+    public Stream OpenRead(string storagePath)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(storagePath);
+
+        if (!File.Exists(storagePath))
+            throw new FileNotFoundException("Attachment file not found.", storagePath);
+
+        return new FileStream(storagePath, FileMode.Open, FileAccess.Read, FileShare.Read);
     }
 
     private void ValidateFile(IUploadedFile file)
     {
         if (file.Length <= 0)
-            throw new InvalidOperationException("Attachment cannot be empty.");
+            throw new("Attachment cannot be empty.");
 
         if (file.Length > _options.MaxFileSizeInMb * 1024 * 1024)
-            throw new InvalidOperationException($"Attachment exceeds the maximum allowed size of {_options.MaxFileSizeInMb} MB.");
+            throw new InvalidDataAppException($"Attachment exceeds the maximum allowed size of {_options.MaxFileSizeInMb} MB.");
+
+        if (string.IsNullOrWhiteSpace(file.FileName))
+            throw new InvalidDataAppException("Attachment filename is required.");
 
         var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
 
-        if (!_options.AllowedExtensions.Contains(extension))
-            throw new InvalidOperationException($"Files with extension '{extension}' are not allowed.");
+        if (!_options.AllowedExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase))
+            throw new InvalidDataAppException($"Files with extension '{extension}' are not allowed.");
     }
 }

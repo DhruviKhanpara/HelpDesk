@@ -5,6 +5,7 @@ namespace HelpDesk.TicketService.Application.Features.Tickets.GetTicketById;
 public sealed class GetTicketByIdResponse
 {
     public long Id { get; init; }
+    public string TicketNumber { get; set; } = null!;
     public string Title { get; init; } = null!;
     public string Description { get; init; } = null!;
     public string Category { get; init; } = null!;

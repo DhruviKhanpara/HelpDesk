@@ -5,7 +5,7 @@ using System.Security.Claims;
 
 namespace HelpDesk.TicketService.Infrastructure.Authentication;
 
-public class CurrentUserService : ICurrentUserService
+public sealed class CurrentUserService : ICurrentUserService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 
