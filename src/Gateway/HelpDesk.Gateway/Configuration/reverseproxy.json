@@ -1,0 +1,35 @@
+﻿{
+    "ReverseProxy": {
+        "Routes": {
+            "auth-route": {
+                "ClusterId": "auth-cluster",
+                "Match": {
+                    "Path": "/api/v1/auth/{**catch-all}"
+                }
+            },
+            "ticket-route": {
+                "ClusterId": "ticket-cluster",
+                "Match": {
+                    "Path": "/api/v1/tickets/{**catch-all}"
+                }
+            }
+        },
+
+        "Clusters": {
+            "auth-cluster": {
+                "Destinations": {
+                    "destination1": {
+                        "Address": "https://localhost:7001/"
+                    }
+                }
+            },
+            "ticket-cluster": {
+                "Destinations": {
+                    "destination1": {
+                        "Address": "https://localhost:7002/"
+                    }
+                }
+            }
+        }
+    }
+}
