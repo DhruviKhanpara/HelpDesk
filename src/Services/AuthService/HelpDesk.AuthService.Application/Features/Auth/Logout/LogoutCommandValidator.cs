@@ -2,9 +2,9 @@
 
 namespace HelpDesk.AuthService.Application.Features.Auth.Logout;
 
-public class LogoutValidator : AbstractValidator<LogoutRequest>
+public class LogoutCommandValidator : AbstractValidator<LogoutCommand>
 {
-    public LogoutValidator()
+    public LogoutCommandValidator()
     {
         RuleFor(x => x.RefreshToken)
             .NotEmpty()

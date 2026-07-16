@@ -20,6 +20,7 @@ public sealed class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, 
             .Include(u => u.UserRoles)
                 .ThenInclude(ur => ur.Role)
             .Where(u => u.Id == request.UserId && !u.IsDeleted)
+            .AsNoTracking()
             .SingleOrDefaultAsync(cancellationToken);
 
         if (user is null)

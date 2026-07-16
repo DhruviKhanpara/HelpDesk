@@ -2,9 +2,9 @@
 
 namespace HelpDesk.AuthService.Application.Features.Auth.RefreshToken;
 
-public sealed class RefreshTokenValidator : AbstractValidator<RefreshTokenRequest>
+public sealed class RefreshTokenCommandValidator : AbstractValidator<RefreshTokenCommand>
 {
-    public RefreshTokenValidator()
+    public RefreshTokenCommandValidator()
     {
         RuleFor(x => x.RefreshToken)
             .NotEmpty()
