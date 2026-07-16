@@ -1,4 +1,5 @@
-﻿using HelpDesk.AuthService.Application.Features.Auth.Login;
+﻿using HelpDesk.AuthService.API.Common;
+using HelpDesk.AuthService.Application.Features.Auth.Login;
 using HelpDesk.AuthService.Application.Features.Auth.Logout;
 using HelpDesk.AuthService.Application.Features.Auth.RefreshToken;
 using MediatR;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HelpDesk.AuthService.API.Controllers;
 
 [ApiController]
-[Route("api/v1/auth")]
+[Route(ApiRoutes.V1 + "/auth")]
 public class AuthController : ControllerBase
 {
     private readonly ISender _sender;
