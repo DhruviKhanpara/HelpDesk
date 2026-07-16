@@ -26,6 +26,7 @@ public sealed class GetTicketByIdQueryHandler : IRequestHandler<GetTicketByIdQue
             .Include(x => x.Priority)
             .Include(x => x.Status)
             .Where(u => u.TicketNumber == request.TicketNumber && !u.IsDeleted)
+            .AsNoTracking()
             .SingleOrDefaultAsync(cancellationToken);
 
         if (ticket is null)

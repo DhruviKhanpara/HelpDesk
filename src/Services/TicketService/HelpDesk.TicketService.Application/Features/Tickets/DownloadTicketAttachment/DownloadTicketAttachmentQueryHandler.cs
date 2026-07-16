@@ -21,6 +21,7 @@ public sealed class DownloadTicketAttachmentQueryHandler : IRequestHandler<Downl
     {
         var ticket = await _context.Tickets
             .Include(t => t.Attachments.Where(x => x.Id == request.AttachmentId))
+            .AsNoTracking()
             .SingleOrDefaultAsync(t => t.TicketNumber == request.TicketNumber, cancellationToken);
 
         if (ticket is null)
